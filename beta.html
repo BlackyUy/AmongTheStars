@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Page Title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="Selector.js" ></script>
+        <script type="text/javascript">
+            $(document).ready(loadDatabase());
+        </script>
+
+    </head>
+
+    <body>
+        <div data-role='page' id="main">
+            <div data-role="header">
+                <h1>Select Options</h1>
+            </div><!-- /header -->
+            <div data-role="content">
+
+
+
+                <a href="#results" class="ui-btn ui-shadow ui-corner-all" onclick="randomizeBasicTiles();randomizeRaces();randomizeSpecialTiles()" href="#results">Randomize</a>
+
+
+                <p>Number of Players <select id='NumberOfPlayers' name='playerCount' required>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                </select></p>
+            </div>
+            <div data-role="footer">
+                <h4>Page Footer</h4>
+            </div><!-- /footer -->
+        </div>
+        <div data-role="page" id="results">
+            <div data-role="header">
+                <h1>Results</h1>
+            </div>
+            <div data-role="content">
+                <fieldset class="ui-grid-a" >
+                    <div class="ui-block-a" style="padding-right:20px;paddin-left:20px; padding:bottom:20px">
+                        <div id="basic"></div>
+                        <div id="races"></div>
+
+                    </div>
+                    <div class="ui-block-b" style="padding-right:20px;paddin-left:20px; padding:bottom:20px">
+                        <div id="special"></div>
+                    </div>
+
+                <fieldset class="ui-grid-a">
+
+
+            </div>
+            <div data-role="footer">
+                <a class="ui-btn ui-shadow ui-corner-all"  href="#main">Back to Main Page</a>
+
+            </div>
+        </div>
+    </body>
+
+</html>
