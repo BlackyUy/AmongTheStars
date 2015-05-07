@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Page Title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="Selector.js" ></script>
+        <script type="text/javascript">
+            $(document).ready(loadDatabase());
+        </script>
+
+    </head>
+
+    <body>
+        <div data-role='page' id="main">
+            <div data-role="header">
+                <h1>Select Options</h1>
+            </div><!-- /header -->
+            <div data-role="content">
+
+
+                <fieldset class="ui-grid-a">
+
+
+                    <div class="ui-block-a">
+                            <select name="select-native-1"  id="NumberOfPlayers">
+                                <option value="1">2 Players</option>
+                                <option value="2">3 Players</option>
+                                <option value="3">4 Players</option>
+                                <option value="5">5 Players</option>
+                                <option value="6">6 Players</option>
+                            </select>
+                            <select name="Services" id="Services" data-native-menu="false" data-mini="true" multiple="multiple" size="4">
+                                <option>Expansions</option>
+                                <option value="Base">Base</option>
+                                <option value="The Ambassadors">The Ambassadors</option>
+                                <option value="The Promos">The Promos</option>
+                                <option value="The Ambassador Promos">The Ambassador Promos</option>
+                                <option value="Reprint Promos">Reprint Promos</option>
+
+                            </select>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#results" class="ui-btn ui-shadow ui-corner-all" onclick="randomizeBasicTiles();randomizeRaces();randomizeSpecialTiles()" href="#results">Randomize</a>
+                    </div>
+                </fieldset>
+            </div>
+            <div data-role="footer">
+                <h4>Page Footer</h4>
+            </div><!-- /footer -->
+        </div>
+        <div data-role="page" id="results">
+            <div data-role="header">
+                <h1>Results</h1>
+            </div>
+            <div data-role="content">
+                <fieldset class="ui-grid-a" >
+                    <div class="ui-block-a" >
+                        <div data-role="collapsible" style="padding-right: 20px">
+                            <h1>Basic Locations</h1>
+                            <span id="basic"></span>
+                        </div>
+                        <div data-role="collapsible" style="padding-right:20px;">
+                            <h1>Races</h1>
+                            <span id="races"></span>
+                        </div>
+
+                    </div>
+                    <div class="ui-block-b" >
+                        <div data-role="collapsible" style="padding-left: 20px">
+                            <h1>Special Locations</h1>
+                            <span id="special"></span>
+                        </div>
+
+                    </div>
+
+
+
+
+            </div>
+            <div data-role="footer">
+                <a class="ui-btn ui-shadow ui-corner-all"  href="#main">Back to Main Page</a>
+
+            </div>
+        </div>
+    </body>
+
+</html>
