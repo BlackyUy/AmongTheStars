@@ -5,12 +5,28 @@
 
 var TOTALBASICLOCATIONS;
 var TOTALSPECIALLOCATIONS;
-var BASICTILENUMBER = [18,18,18,20,24];
-var SPECIALTILENUMBER = [24,18,24,40,48]
+var BASICTILENUMBER = [15,15,15,20,24];
+var SPECIALTILENUMBER = [36,27,36,40,48]
 var RACESTOSELECT=[2,3,4,5,6];
+var NUMBEROFCOPIES=[4,3,4,4,4];
 var TOTALRACES;
 var db = openDatabase('mydb', '1.0', 'Test DB', 200 * 1024 * 1024);
 var msg;
+var AMBASSADORS = [3,3,3,4,4];
+var CONFLICTS = [3,6,9,12];
+var OBJECTIVES =[2,3,4,5,6];
+var CONFLICTYEAR = [2,2,2,3,3];
+var ESCALATION=[3,6,2,1,5,32,27,29,10,9,8,24,21,17,15];
+var ENERGYHUNGRY=[4,3,1,28,26,33,9,12,11,23,22,20,14,18,17];
+var PEACEAMONGTHESTARS=[2,6,30,33,29,7,12,11,21,23,22,19,14,18,13];
+var MONEYHUNGRY=[1,4,5,25,28,27,30,8,9,10,22,23,24,15,18];
+var EXPLOSIVEGROWTH=[3,6,4,30,26,29,8,9,11,20,21,2214,16,17];
+var blueBasicList = [];
+var redBasicList = [];
+var greenBasicList=[];
+var yellowBasicList=[];
+var purpleBasicList=[];
+    
 
 //var numberOfCards = 20;
 //var turnTokenSize=10;
@@ -167,7 +183,7 @@ function loadDatabase() {
         tx.executeSql('INSERT INTO SpecialLocations (id, name, quantity, color, url, expansion ) VALUES (59, "Sectional Command Office",1 , "Blue", "http:","Reprint Promos")');
 
 
-        tx.executeSql('INSERT INTO SpecialLocations (id, name, quantity, color, url, expansion ) VALUES (60, "Alien Museum",2 , "Purple/Green", "http:","Dual expansion 1")');
+        tx.executeSql('INSERT INTO SpecialLocations (id, name, quantity, color, url, expansion ) VALUES (60, "Alien Museum",2 , "Purple/Green", "http:","Dual Set 1")');
         tx.executeSql('INSERT INTO SpecialLocations (id, name, quantity, color, url, expansion ) VALUES (61, "Galactic Court",2 , "Green/Blue", "http:","Dual Set 1")');
         tx.executeSql('INSERT INTO SpecialLocations (id, name, quantity, color, url, expansion ) VALUES (62, "Holdic Cells",2 , "Blue/Red", "http:","Dual Set 1")');
         tx.executeSql('INSERT INTO SpecialLocations (id, name, quantity, color, url, expansion ) VALUES (63, "Hotel",2 , "Yellow/Purple", "http:","Dual Set 1")');
@@ -217,6 +233,7 @@ function loadDatabase() {
 
         msg = '<p>Log message created and row inserted.</p>';
         console.log(msg);
+        selectBalancedTiles();
         //document.querySelector('#status').innerHTML = msg;
 
 
@@ -234,10 +251,13 @@ function loadDatabase() {
             //document.querySelector('#status').innerHTML += msg;
             console.log(msg);
             for (i = 0; i < TOTALBASICLOCATIONS; i++) {
+                addToList(results.rows.item(i).id, results.rows.item(i).color);
+                
                 msg = "<p><b>" + results.rows.item(i).name + "</b></p>";
                 //document.querySelector('#status').innerHTML += msg;
-                console.log(msg);
+                //console.log(msg);
             }
+           
         }, null);
     });
     db.transaction(function (tx) {
@@ -284,7 +304,7 @@ function randomizeBasicTiles(){db.transaction(function (tx){
     var questionString='';
     var min = 1;
     var max = TOTALBASICLOCATIONS;
-    var tileList = fullRandArray(numberOfTiles, TOTALBASICLOCATIONS);
+    var tileList = fullRandArray(numberOfTiles, TOTALBASICLOCATIONS, 1);
     for (i = 0; i<numberOfTiles; i++){
         questionString +='?,';
 
@@ -297,7 +317,7 @@ function randomizeBasicTiles(){db.transaction(function (tx){
         msg+='<ul data-role="listview" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">';
 
         for (i = 0; i<largo;i++) {
-            msg += '<li class="ui-li-static ui-body-inherit">' + results.rows.item(i).name + ' - ' + results.rows.item(i).color + ' - ' + results.rows.item(i).expansion + "</li>";
+            msg += '<li class="ui-li-static ui-body-inherit" style=";background-color:'+ getColor(results.rows.item(i).color)+' ">' + results.rows.item(i).name + ' - ' +results.rows.item(i).color + ' - ' + results.rows.item(i).expansion + "</li>";
 
         }
         msg+= "</ul>";
@@ -314,24 +334,24 @@ function randomIntFromInterval(min,max)
 
 }
 
-function fullRandArray(quantity, maximumNumber){
+function fullRandArray(quantity, maximumNumber, minNumber){
     var listOfNumbers = [];
     for(var i = 0; i<quantity;i++){
-        listOfNumbers[i]=noRepeats(listOfNumbers, maximumNumber);
+        listOfNumbers[i]=noRepeats(listOfNumbers, maximumNumber, minNumber);
     }
     return listOfNumbers;
 }
 
 
-function noRepeats(listOfNumbers , maximumNumber) {
-    var num = randomIntFromInterval(1, maximumNumber);
+function noRepeats(listOfNumbers , maximumNumber, minNumber) {
+    var num = randomIntFromInterval(minNumber, maximumNumber);
     if (listOfNumbers.indexOf(num) < 0) {
 
         return num;
     }
 
     else {
-        return noRepeats(listOfNumbers, maximumNumber);
+        return noRepeats(listOfNumbers, maximumNumber, minNumber);
     }
 }
 
@@ -342,7 +362,7 @@ function randomizeSpecialTiles(){db.transaction(function (tx){
     var questionString='';
     var min = 1;
     var max = TOTALSPECIALLOCATIONS;
-    var tileList = fullRandArray(numberOfTiles, TOTALSPECIALLOCATIONS);
+    var tileList = fullRandArray(numberOfTiles, TOTALSPECIALLOCATIONS, 1);
     for (i = 0; i<numberOfTiles; i++){
         questionString +='?,';
 
@@ -356,7 +376,7 @@ function randomizeSpecialTiles(){db.transaction(function (tx){
         msg+='<ul data-role="listview" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">';
 
         for (i = 0; i<largo;i++) {
-            msg += '<li class="ui-li-static ui-body-inherit">' + results.rows.item(i).name + ' - ' + results.rows.item(i).color + ' - ' + results.rows.item(i).expansion + "</li>";
+            msg += '<li class="ui-li-static ui-body-inherit" style=";background-color:'+ getColor(results.rows.item(i).color)+' ">' + results.rows.item(i).name + ' - ' + results.rows.item(i).color + ' - ' + results.rows.item(i).expansion + "</li>";
         }
         msg+= "</ul>";
         document.querySelector('#special').innerHTML=msg;
@@ -373,7 +393,7 @@ function randomizeRaces(){db.transaction(function (tx){
     var questionString='';
     var min = 1;
     var max = TOTALRACES;
-    var tileList = fullRandArray(numberOfTiles, TOTALRACES);
+    var tileList = fullRandArray(numberOfTiles, TOTALRACES, 1);
     for (i = 0; i<numberOfTiles; i++){
         questionString +='?,';
 
@@ -392,14 +412,270 @@ function randomizeRaces(){db.transaction(function (tx){
         msg+= "</ul>";
         document.querySelector('#races').innerHTML=msg;
     });
+    getNumberOfCards();
 })
 };
+function runPresets(){db.transaction(function (tx){
+    msg ='';
+    var playerCount = document.getElementById('NumberOfPlayers');
+    var numberOfTiles = RACESTOSELECT[playerCount.selectedIndex];
+
+    var questionString='?,?,?,?,?,?,?,?,?,?,?,?,?,?,?';
+    var tileList = returnWhichList();
+    
+    
+
+    tx.executeSql('select * from BasicLocations where id  in ('+ questionString +')', tileList, function (tx, results){
+        var largo = results.rows.length;
+        msg+='<ul data-role="listview" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">';
+
+        for (i = 0; i<largo;i++) {
+            msg += '<li class="ui-li-static ui-body-inherit" style=";background-color:'+ getColor(results.rows.item(i).color)+' ">' + results.rows.item(i).name + ' - ' + results.rows.item(i).color + ' - ' + results.rows.item(i).expansion + "</li>";
+        }
+        msg+= "</ul>";
+        document.querySelector('#basic').innerHTML=msg;
+    });
+    randomizeRaces();
+    randomizeSpecialTiles();
+    getNumberOfCards();
+})
+    
+};
+function returnWhichList(){
+        var presetValue = $('#ProposedSets').val();
+       switch (presetValue){
+           case "1": return ESCALATION;
+                break;
+           case "2": return ENERGYHUNGRY;
+               break;
+           case "3": return PEACEAMONGTHESTARS;
+               break;
+           case "4": return MONEYHUNGRY;
+               break;
+           case "5": return EXPLOSIVEGROWTH;
+               break;
+       }
+
+}
+function getColor(color){
+    switch(color){
+        case "Red" :return '#fc9c9c';
+            break;
+        case "Green": return '#a9f9ad';
+            break;
+        case "Blue": return '#b1cdf9';
+            break;
+        case 'Purple':return '#ecc8f7';
+            break;
+        case 'Yellow':return '#f7f3cd';
+            break;
+    }
+}
+function getNumberOfCards(){
+    var playerCount = document.getElementById('NumberOfPlayers');
+    var copies = NUMBEROFCOPIES[playerCount.selectedIndex];
+    $('#copies').html(copies);
+    var specialCopies =SPECIALTILENUMBER[playerCount.selectedIndex];
+    $('#specialCopies').html(specialCopies);
+    var ambassadors = AMBASSADORS[playerCount.selectedIndex];
+    var objectives = OBJECTIVES[playerCount.selectedIndex];
+    var conflicts = CONFLICTS[playerCount.selectedIndex];
+    var conflictYear = CONFLICTYEAR[playerCount.selectedIndex];
+    $('#objectiveNumber').html(objectives);
+    $('#ambassadorNumber').html(ambassadors);
+    $('#conflictCards').html(conflicts);
+    $('#conflictYear').html(conflictYear);
+    if($('#conflictSwitch').val()=='off'){
+        $('#conflicts').hide();
+    }
+    if($('#ambassadorsSwitch').val()=='off'){
+        $('#ambassadors').hide();
+    }
+    if($('#objectivesSwitch').val()=='off'){
+        $('#objectives').hide();
+    }
+   
+    
+    
+    
+    //$('#objectives')
+    //$('#ambassadors')
+    //$('#conflicts')
+
+    
+}
 
 function loadAllThree(){
     randomizeBasicTiles();
     randomizeRaces();
     randomizeSpecialTiles();
 };
+
+function addToList(aTileId, aTileColor){
+    if (aTileColor =='Blue'){
+        blueBasicList[blueBasicList.length] = aTileId;
+        
+    }
+    else if (aTileColor =='Green'){
+        greenBasicList[greenBasicList.length] = aTileId;
+        
+    }
+     else if (aTileColor =='Yellow'){
+        yellowBasicList[yellowBasicList.length] = aTileId;
+        
+    }
+     else if (aTileColor =='Red'){
+        redBasicList[redBasicList.length] = aTileId;
+        
+    }
+     else if (aTileColor =='Purple'){
+        purpleBasicList[purpleBasicList.length] = aTileId;
+        
+    }
+    
+}
+
+function selectBalancedTiles(){db.transaction(function (tx){
+        msg ='';
+        blueTiles = $('#blueT').val();
+        yellowTiles = $('#yellowT').val();
+        greenTiles=$('#greenT').val();
+        purpleTiles=$('#purpleT').val();
+        redTiles=$('#redT').val();
+
+        var yellowTileList = fullRandArray(yellowTiles, yellowBasicList.length-1, 0);
+        var redTileList = fullRandArray(redTiles, redBasicList.length-1, 0);
+        var blueTileList = fullRandArray(blueTiles, blueBasicList.length-1, 0);
+        var greenTileList = fullRandArray(greenTiles, greenBasicList.length-1, 0);
+        var purpleTileList = fullRandArray(purpleTiles, purpleBasicList.length-1, 0);
+
+
+        var selectedTiles = [];
+
+        for (i=0;i<yellowTileList.length;i++){
+            selectedTiles[selectedTiles.length]=yellowBasicList[yellowTileList[i]];
+
+        }
+        for (i=0;i<redTileList.length;i++){
+            selectedTiles[selectedTiles.length]=redBasicList[redTileList[i]];
+
+        }
+        for (i=0;i<blueTileList.length;i++){
+            selectedTiles[selectedTiles.length]=blueBasicList[blueTileList[i]];
+
+        }
+        for (i=0;i<greenTileList.length;i++){
+            selectedTiles[selectedTiles.length]=greenBasicList[greenTileList[i]];
+
+        }
+        for (i=0;i<purpleTileList.length;i++){
+            selectedTiles[selectedTiles.length]=purpleBasicList[purpleTileList[i]];
+
+        }
+        var questionString ='';
+
+        for (i =0;i<selectedTiles.length;i++){
+            questionString =questionString + '?,'
+        }
+        questionString = questionString.substring(0,questionString.length-1);
+
+
+
+         tx.executeSql('select * from BasicLocations where id  in ('+ questionString +')', selectedTiles, function (tx, results){
+            var largo = results.rows.length;
+            msg+='<ul data-role="listview" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">';
+
+            for (i = 0; i<largo;i++) {
+                msg += '<li class="ui-li-static ui-body-inherit" style=";background-color:'+ getColor(results.rows.item(i).color)+' ">' + results.rows.item(i).name + ' - ' + results.rows.item(i).color + ' - ' +      results.rows.item(i).expansion + "</li>";
+            }
+            msg+= "</ul>";
+            document.querySelector('#basic').innerHTML=msg;
+        });
+        
+    });
+   getNumberOfCards();
+    randomizeRaces();
+    
+    
+    
+    
+    
+}
+
+function validateNumbers(){
+    var playerCount = document.getElementById('NumberOfPlayers');
+    blueTiles = $('#blueT').val();
+    yellowTiles = $('#yellowT').val();  
+    greenTiles=$('#greenT').val();
+    purpleTiles=$('#purpleT').val();
+    redTiles=$('#redT').val();
+    var numberOfTiles = BASICTILENUMBER[playerCount.selectedIndex];
+    if ( blueTiles>blueBasicList.length){
+        alert("blue");
+        return false;
+    }
+    if ( yellowTiles>yellowBasicList.length){
+        alert('yellow');    
+        return False
+        
+    }
+    if ( greenTiles>greenBasicList.length){
+        alert('green');
+        return False
+    }
+    if ( purpleTiles>purpleBasicList.length){
+        alert('purple');
+        return False
+    }
+    if ( redTiles>redBasicList.length){
+        alert('red');
+        return False
+    }
+    totalTiles = parseInt(blueTiles)+parseInt(redTiles)+parseInt(yellowTiles)+parseInt(greenTiles)+parseInt(purpleTiles);
+    if (totalTiles!=numberOfTiles){
+       
+        return False
+    }
+    else{
+        selectBalancedTiles();
+        $.mobile.pageContainer.pagecontainer ("change", "#results");
+    }
+    
+    
+}
+function checkChange(){
+    blueTiles = $('#blueT').val();
+    yellowTiles = $('#yellowT').val();  
+    greenTiles=$('#greenT').val();
+    purpleTiles=$('#purpleT').val();
+    redTiles=$('#redT').val();
+    totalTiles = parseInt(blueTiles)+parseInt(redTiles)+parseInt(yellowTiles)+parseInt(greenTiles)+parseInt(purpleTiles);
+    var playerCount = document.getElementById('NumberOfPlayers');
+    var numberOfTiles = BASICTILENUMBER[playerCount.selectedIndex];
+     $('#coloredTiles').html(BASICTILENUMBER[playerCount.selectedIndex]);
+    $('#sumOfTiles').html(totalTiles);
+    if(totalTiles!=numberOfTiles){
+        $('#randomButton').hide();
+        $('#tilesBar').css('background-color','#fc9c9c');
+    }
+    else{
+        $('#tilesBar').css('background-color', '#a9f9ad');
+        $('#randomButton').show();
+    }
+}
+function setMax(){
+   
+    $('#blueT').attr('max', blueBasicList.length);
+    $('#greenT').attr('max', greenBasicList.length);
+    $('#yellowT').attr('max', yellowBasicList.length);
+    $('#purpleT').attr('max', purpleBasicList.length);
+    $('#redT').attr('max', redBasicList.length);
+    checkChange();
+    
+}
+
+
+
 
 
 

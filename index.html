@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Page Title</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="Selector.js" ></script>
+        <script type="text/javascript">
+            $(document).ready(loadDatabase());
+            
+        </script>
+        <style>
+            .ui-content, .ui-page{
+                background-image: url("background.png");
+            }
+            .ui-header, .ui-title, .ui-footer, .ui-bar{
+            
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div data-role='page' id="main">
+            <div data-role="header">
+                <h1>Select Options</h1>
+            </div><!-- /header -->
+            <div data-role="content">
+
+
+               
+
+
+                    
+                            <select name="select-native-1"  id="NumberOfPlayers">
+                                <option value="1">2 Players</option>
+                                <option value="2">3 Players</option>
+                                <option value="3">4 Players</option>
+                                <option value="5">5 Players</option>
+                                <option value="6">6 Players</option>
+                            </select>
+                
+                            <div class="ui-grid-b">
+                                <div class="ui-block-a">
+                                    <div class="ui-bar ui-bar-a" style="height:60px;text-align:center">
+                                        <label for="flip-1">Conflicts:</label>
+                                        <select name="flip-1" id="conflictSwitch" data-role="slider">
+                                            <option value="off">Off</option>
+                                            <option value="on" selected>On</option>
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div class="ui-block-b">
+                                    <div class="ui-bar ui-bar-a" style="height:60px;text-align:center">
+                                        <label for="flip-1">Ambassadors:</label>
+                                        <select name="flip-1" id="ambassadorsSwitch" data-role="slider">
+                                            <option value="off">Off</option>
+                                            <option value="on" selected>On</option>
+                                        </select> 
+                                    </div>
+                                </div>
+                                <div class="ui-block-c">
+                                    <div class="ui-bar ui-bar-a" style="height:60px;text-align:center">
+                                        <label for="flip-1">Objectives:</label>
+                                        <select name="flip-1" id="objectivesSwitch" data-role="slider">
+                                            <option value="off">Off</option>
+                                            <option value="on" selected>On</option>
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                        
+                
+                    
+                        <a href="#results" class="ui-btn ui-shadow ui-corner-all" onclick="randomizeBasicTiles();randomizeRaces();randomizeSpecialTiles()" href="#results">Randomize</a>
+                        <a href="#presets" class="ui-btn ui-shadow ui-corner-all"  >Choose a preset</a>
+                        <a href="#colorSplit"  onclick='setMax();' class="ui-btn ui-shadow ui-corner-all"  >Select color Split</a>
+                        
+                
+                
+            </div>
+            <div data-role="footer">
+                <h4>BlackyUy</h4>
+            </div><!-- /footer -->
+        </div>
+        <div data-role='page' id="colorSplit">
+            <div data-role="header">
+                <h1>Select Options</h1>
+            </div><!-- /header -->
+            <div data-role="content">
+
+
+               
+
+
+                <ul data-role="listview" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">'    
+                    <li id='tilesBar' class="ui-li-static ui-body-inherit">Selected <span id='sumOfTiles'></span>/<span id=coloredTiles></span> locations </li>
+                </ul>
+                            
+                            <div class="ui-grid-d">
+                                
+                                <div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:60px;background-color:#b1cdf9;text-align:center">Blue <br/><input type="number" id='blueT'name="number" value="3" min='0'onchange="checkChange();"/></div></div>
+                                <div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:60px;background-color:#fc9c9c;text-align:center">Red <br/><input type="number" id='redT'name="number" value="3" min='0' onchange="checkChange();" /></div></div>
+                                <div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:60px;background-color:#a9f9ad;text-align:center">Green <br/><input type="number" id='greenT' name="number" value="3" min='0' onchange="checkChange();"/></div></div>
+                                <div class="ui-block-d"><div class="ui-bar ui-bar-a" style="height:60px;background-color:#f7f3cd;text-align:center">Yellow <br/><input type="number" id='yellowT'name="number" value="3" min='0' onchange="checkChange();" /></div></div>
+                                <div class="ui-block-e"><div class="ui-bar ui-bar-a" style="height:60px;background-color:#ecc8f7;text-align:center">Purple <br/><input type="number" id='purpleT'name="number" value="3" min='0' onchange="checkChange();"/></div></div>
+                            </div>
+                           <!-- <select name="Sets" id="Sets" data-native-menu="false" data-mini="true" multiple="multiple" size="4">
+                                <option>Expansions</option>
+                                <option value="Base">Base</option>
+                                <option value="The Ambassadors">The Ambassadors</option>
+                                <option value="The Promos">The Promos</option>
+                                <option value="The Ambassador Promos">The Ambassador Promos</option>
+                                <option value="Reprint Promos">Reprint Promos</option>
+
+                            </select>-->
+                        
+                
+                    
+                       
+                        <a  onclick ="validateNumbers();" class="ui-btn ui-shadow ui-corner-all"  id="randomButton">Randomize</a>
+                        
+                
+                
+            </div>
+            <div data-role="footer">
+                <h4>BlackyUy</h4>
+            </div><!-- /footer -->
+        </div>
+        <div data-role="page" id="results">
+            <div data-role="header">
+                <h1>Results</h1>
+            </div>
+            <div data-role="content">
+                
+                        <div data-role="collapsible" style="padding-right: 20px" data-collapsed='false'>
+                            <h1>Basic Locations (include <span id="copies"></span> copies of each)</h1>
+                            <span id="basic"></span>
+                        </div>
+                        <div data-role="collapsible" style="padding-right: 20px" data-collapsed='true'>
+                            <h1>Include <span id="specialCopies"></span> randomly drawn special locations </h1>
+                            <span id="special"></span>
+                        </div>
+                        <div data-role="collapsible" style="padding-right:20px;" data-collapsed='false'>
+                            <h1>Races</h1>
+                            <span id="races"></span>
+                        </div>
+                         <div data-role="collapsible" style="padding-right:20px;" data-collapsed='false' id='objectives'>
+                            <h1>Reveal <span id='objectiveNumber'></span> objectives</h1>
+                        </div>
+                         <div data-role="collapsible" style="padding-right:20px;" data-collapsed='false' id='ambassadors'>
+                            <h1>Reveal <span id='ambassadorNumber'></span> new ambassadors each year (and replenish when invited).</h1>
+                        </div>
+                         <div data-role="collapsible" style="padding-right:20px;" data-collapsed='false' id='conflicts'>
+                            <h1>Add <span id='conflictCards'></span> conflict cards on year <span id='conflictYear'></span></h1>
+                        </div>
+
+                    
+
+
+
+            </div>
+            <div data-role="footer">
+                <a class="ui-btn ui-shadow ui-corner-all"  href="#main">Back to Main Page</a>
+
+            </div>
+        </div>
+            
+         <div data-role='page' id="presets">
+            <div data-role="header">
+                <h1>Select Options</h1>
+            </div><!-- /header -->
+            <div data-role="content">
+
+
+                
+                           
+                        <select name="Proposed Sets" id="ProposedSets"  data-mini="true" >
+                                <option value="none">None</option>
+                                <option value="1">Escalation</option>
+                                <option value="2">Energy Hungry</option>
+                                <option value="3">Peace Among the Stars</option>
+                                <option value="4">Money Hungry</option>
+                                <option value="5">Explosive Growth</option>
+                        </select>
+                
+                        <a  class="ui-btn ui-shadow ui-corner-all" onclick="runPresets()" href="#results">See Preset</a>
+                    
+                
+            </div>
+            <div data-role="footer">
+                <h4>BlackUy</h4>
+            </div><!-- /footer -->
+        </div>
+            
+            
+    </body>
+
+</html>
